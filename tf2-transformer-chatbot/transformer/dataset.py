@@ -52,7 +52,7 @@ def load_conversations(hparams, lines_filename, conversations_filename):
     # get conversation in a list of line ID
     conversation = [line[1:-1] for line in parts[3][1:-1].split(', ')]
     for i in range(len(conversation) - 1):
-      questions.append(preprocess_sentence(id2line[conversation[i]]))
+      questions.append(preprocess_sentence(id2line[conversation[i]]))  # TODO 这边可以改进，用一个字典存储
       answers.append(preprocess_sentence(id2line[conversation[i + 1]]))
       if len(questions) >= hparams.max_samples:
         return questions, answers

@@ -7,6 +7,8 @@ from transformer.model import transformer
 from transformer.dataset import get_dataset, preprocess_sentence
 
 
+tf.config.run_functions_eagerly(True)
+
 class CustomSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
 
   def __init__(self, hparams, warmup_steps=4000):
@@ -97,6 +99,11 @@ def main(hparams):
 
   model.compile(optimizer, loss=loss_function, metrics=[accuracy])
 
+  data_one_step = dataset.as_numpy_iterator().next()
+  X = data_one_step[0]
+  y = data_one_step[1]
+  model.train_on_batch(X,y)
+
   model.fit(dataset, epochs=hparams.epochs)
 
   evaluate(hparams, model, tokenizer)
@@ -118,7 +125,7 @@ if __name__ == '__main__':
   parser.add_argument('--num_heads', default=8, type=int)
   parser.add_argument('--dropout', default=0.1, type=float)
   parser.add_argument('--activation', default='relu', type=str)
-  parser.add_argument('--epochs', default=20, type=int)
+  parser.add_argument('--epochs', default=1, type=int)
 
   hparams = parser.parse_args()
   main(hparams)
