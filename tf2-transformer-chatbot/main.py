@@ -1,13 +1,12 @@
 import argparse
 import tensorflow as tf
-
-tf.random.set_seed(1234)
-
+import os
 from transformer.model import transformer
 from transformer.dataset import get_dataset, preprocess_sentence
 
-
+os.environ["CUDA_VISIBLE_DEVICES"] = " "
 tf.config.run_functions_eagerly(True)
+
 
 class CustomSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
 
@@ -102,7 +101,7 @@ def main(hparams):
   data_one_step = dataset.as_numpy_iterator().next()
   X = data_one_step[0]
   y = data_one_step[1]
-  model.train_on_batch(X,y)
+  model.train_on_batch(X, y)
 
   model.fit(dataset, epochs=hparams.epochs)
 
